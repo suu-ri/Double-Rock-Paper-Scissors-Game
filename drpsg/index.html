@@ -53,6 +53,8 @@
       <button id="pc_hand"></button>
     </div>
 
+    <div id="timer">Timer: 2s</div>
+
     <div id="result_container">
       <h2 id="result"></h2>  
       <p id="stats"></p>
@@ -80,6 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetBtn = document.getElementById('reset_btn');
     const resultDiv = document.getElementById('result');
     const statsDiv = document.getElementById('stats');
+
+    // テーマを切り替える
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
     if (localStorage.getItem('theme') === 'night') {
@@ -100,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('theme', 'day');
     }
     });
+
     const images = [
         'url("img/Rock.png")',
         'url("img/Scissors.png")',
@@ -116,6 +121,45 @@ document.addEventListener('DOMContentLoaded', function() {
         ties: 0
     };
     
+    // タイマー
+    let timerInterval;
+    let timeLeft = 2;
+
+    function startTimer() {
+      timeLeft = 2;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          handleTimeUp();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById('timer').textContent = `Timer: ${timeLeft}s`;
+    }
+
+    function handleTimeUp() {
+      // 时间到，玩家未选择
+      resultDiv.textContent = "You lose!";
+      stats.losses++;
+      highlightButton();
+      updateStats();
+      stopAnimation();
+      gameActive = false;
+      enablePlayerButtons(false);
+      startBtn.disabled = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timeLeft = 2;
+      updateTimerDisplay();
+    }
+
     let gameActive = false;
     function enablePlayerButtons(enable) {
         [rockBtn, scissorsBtn, paperBtn].forEach(btn => {
@@ -127,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     startBtn.addEventListener('click', function() {
+        startTimer(); // 启动计时器
         if (intervalId) {
             clearInterval(intervalId);
         }
@@ -169,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!gameActive) return;  
       stopAnimation();
       highlightButton(selectedBtn);
+      clearInterval(timerInterval); // 停止计时器
       // 确定玩家选择
       if (selectedBtn === rockBtn) {
         player_hand = 0;
@@ -231,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
         [rockBtn, scissorsBtn, paperBtn].forEach(btn => {
             btn.classList.remove('dimmed', 'selected');
         });
+        resetTimer();
     });
 
     [rockBtn, scissorsBtn, paperBtn].forEach(btn => {
