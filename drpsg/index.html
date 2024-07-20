@@ -34,6 +34,7 @@
 <div class="wrapper">
   <header>
     <!-- <h1>Janken</h1> -->
+    <button id="theme-toggle">Switch Theme</button>
   </header>
   
   <main>
@@ -79,7 +80,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetBtn = document.getElementById('reset_btn');
     const resultDiv = document.getElementById('result');
     const statsDiv = document.getElementById('stats');
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    if (localStorage.getItem('theme') === 'night') {
+      body.classList.add('night-mode');
+      themeToggle.textContent = 'Switch to daytime mode';
+    } else {
+      // body.classList.add('night-mode');
+      themeToggle.textContent = 'Switch to night mode';
+    }
+    themeToggle.addEventListener('click', function() {
+    body.classList.toggle('night-mode');
     
+    if (body.classList.contains('night-mode')) {
+      themeToggle.textContent = 'Switch to daytime mode';
+      localStorage.setItem('theme', 'night');
+    } else {
+      themeToggle.textContent = 'Switch to night mode';
+      localStorage.setItem('theme', 'day');
+    }
+    });
     const images = [
         'url("img/Rock.png")',
         'url("img/Scissors.png")',

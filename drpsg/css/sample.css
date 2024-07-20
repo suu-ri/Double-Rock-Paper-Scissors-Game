@@ -104,3 +104,39 @@ li:hover{
     background: #0066CC;
     color:#fff;
 }
+
+/* Switch Theme */
+#theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+#theme-toggle:hover {
+    box-shadow: 0 0 10px rgba(33, 33, 33, 1);
+}
+.night-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+.night-mode header,
+.night-mode footer,
+.night-mode main {
+    background-color: #222;
+    border-color: #444;
+}
+
+.night-mode #start_btn,
+.night-mode #reset_btn {
+    background-color: #555;
+    color: #fff;
+}
+
+.night-mode #rock_btn,
+.night-mode #scissors_btn,
+.night-mode #paper_btn {
+    filter: invert(1);
+}
